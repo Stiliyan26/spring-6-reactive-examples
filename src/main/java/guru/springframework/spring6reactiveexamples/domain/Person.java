@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Created by jt, Spring Framework Guru.
- */
 @Data
 @Builder
 @AllArgsConstructor

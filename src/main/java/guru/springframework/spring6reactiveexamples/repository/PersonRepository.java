@@ -1,4 +1,4 @@
-package guru.springframework.spring6reactiveexamples.repositories;
+package guru.springframework.spring6reactiveexamples.repository;
 
 import guru.springframework.spring6reactiveexamples.domain.Person;
 import reactor.core.publisher.Flux;
