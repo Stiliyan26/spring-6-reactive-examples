@@ -2,14 +2,11 @@ package guru.springframework.spring6reactiveexamples.repository;
 
 import guru.springframework.spring6reactiveexamples.domain.Person;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class PersonRepositoryImplTest {
 
@@ -85,6 +82,43 @@ class PersonRepositoryImplTest {
 
         listMono.subscribe(list -> {
             list.forEach(person -> System.out.println(person.getFirstName()));
+        });
+    }
+
+    @Test
+    void testFilterOnName() {
+        personRepository.findAll()
+                .filter(person -> person.getFirstName().equals("Fiona"))
+                .subscribe(person -> System.out.println(person.getFirstName()));
+    }
+
+    @Test
+    void testGetId() {
+        Mono<Person> fionaMono = personRepository.findAll()
+                .filter(person -> person.getFirstName().equals("Fiona"))
+                .next();
+
+        fionaMono.subscribe(person -> System.out.println(person.getFirstName()));
+    }
+
+    @Test
+    void testFindPersonByIdNotFound() {
+        Flux<Person> personFlux = personRepository.findAll();
+
+        final Integer id = 8;
+
+        Mono<Person> personMono = personFlux.filter(person -> person.getId() == id)
+                .single()
+                .doOnError(throwable -> {
+                    System.out.println("Error occurred in flux");
+                    System.out.println(throwable.toString());
+                });
+
+        personMono.subscribe(person -> {
+            System.out.println(person.toString());
+        }, throwable -> {
+            System.out.println("Error occurred in the mono");
+            System.out.println(throwable.toString());
         });
     }
 }
